@@ -10,7 +10,7 @@ npm install
 
 Modify `.env` file as needed:
 - LWD_URI
-  - The lightwalletd server URI, ommit the `https://`.
+  - The lightwalletd server URI, omit the `https://`.
 - LOCAL_LWD
   - If using a local lightwalletd server, set `LOCAL_LWD="true"`.
 - DUMP_FILE
