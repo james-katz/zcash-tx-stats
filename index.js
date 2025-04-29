@@ -109,7 +109,7 @@ async function syncTransactions(start, end, writeDb) {
     while(latestSynced < endHeight) {
         const chunk = Math.min(latestSynced + batchSize, endHeight);
         try {
-            const blocks = await grpc.getBlockRange(latestSynced, chunk);                
+            const blocks = await grpc.getBlockRange(lc, latestSynced, chunk);                
             
             for(const block of blocks) {                          
                 for(const vtx of block.vtx) {                                                    
@@ -198,4 +198,5 @@ async function syncTransactions(start, end, writeDb) {
     //     transactions: txProcessed,
     //     transactions_filter: txProcessedFilter
     // }
+    process.exit(0);
 }

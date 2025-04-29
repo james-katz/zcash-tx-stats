@@ -8,20 +8,16 @@ npm install
 
 ## Setup
 
-Modify `.env` file as needed for custom LWD servers. 
+Modify `.env` file as needed:
+- LWD_URI
+  - The lightwalletd server URI, ommit the `https://`.
+- LOCAL_LWD
+  - If using a local lightwalletd server, set `LOCAL_LWD="true"`.
+- DUMP_FILE
+  - The filename for dumping the transactions data.
 
-
-#### Local LWD 
-
-For use with a local LWD server try the following:
-
-Edit `.env`
-
-``` markdown
-LWD_URI = "127.0.0.1:9067"
-DUMP_FILE = "transaction_summary.json"
-```
-Change line 26 of `grpc_connector.js`
-``` javascript
-return client = new compactTxStreamer(serverUri, grpc.credentials.createInsecure(), options);
-```
+## Usage
+- Fetching blocks
+  > Run `node index.js` and wait for block to be downloaded. When done press `ctrl+c` to break.
+- Dumping transactions information
+  > Run `node dump_database.js`.

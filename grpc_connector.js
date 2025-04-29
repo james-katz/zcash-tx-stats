@@ -5,6 +5,10 @@ const PROTO_PATH = './proto/service.proto';
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
+const dotenv = require('dotenv');
+dotenv.config();
+const local_lwd = process.env.LOCAL_LWD.toLowerCase() === "true" ? true : false;
+
 const packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
     {
@@ -23,7 +27,18 @@ const compactTxStreamer = grpc.loadPackageDefinition(packageDefinition).cash.z.w
 function init(serverUri) {
     // let options = { 'grpc.max_receive_message_length': 1752460652};
     const options = {};
-    return client = new compactTxStreamer(serverUri, grpc.credentials.createSsl(), options);
+
+    try {
+        if(local_lwd) {
+            return new compactTxStreamer(serverUri, grpc.credentials.createInsecure(), options);
+        }    
+    
+        return new compactTxStreamer(serverUri, grpc.credentials.createSsl(), options);
+    }
+    catch(e) {
+        console.log("Couldn't initialize grpc client", e);
+        process.exit(1);
+    }
 }
 
 async function getLatestBlock(client) {
@@ -72,7 +87,7 @@ async function getTransaction(client, filter) {
     }); 
 }
 
-function getBlockRange(_start, _end) {
+function getBlockRange(client, _start, _end) {
     let blocks = [];
 
     const range = {
